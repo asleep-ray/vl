@@ -21,7 +21,11 @@ Note: Downloading and processing the full dataset is time-consuming. For this pr
 
 ## Step 3. Training
 
-Train the model with below.
+This trains the integrated model for generating captions from images.
+Integrated model that combines CLIP and FLAN-T5 models as the encoder and decoder, respectively.
+For training, the encoder CLIP model is frozen. The decoder FLAN-T5 model is trained with the LoRA module.
+
+Train the model with below command.
 
 ```bash
 python train.py
