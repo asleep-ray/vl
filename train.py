@@ -9,10 +9,9 @@ from transformers import Trainer, TrainingArguments
 import model
 import utils
 
+os.environ["DISABLE_MLFLOW_INTEGRATION"] = "TRUE"  # Disable MLflow integration
 timestamp = datetime.now(pytz.timezone("Asia/Seoul")).strftime("%Y%m%d-%H%M%S")  # KST
 
-# Disable MLflow integration
-os.environ["DISABLE_MLFLOW_INTEGRATION"] = "TRUE"
 
 # Load the dataset
 dataset_dict = load_from_disk("dataset/small_split")
@@ -35,8 +34,8 @@ training_args = TrainingArguments(
     logging_dir=f"./runs/{timestamp}",
     save_steps=50,
     save_total_limit=5,
-    per_device_train_batch_size=16,  # Increase the batch size for training
-    per_device_eval_batch_size=8,  # Increase the batch size for evaluation
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=8,
     evaluation_strategy="steps",
     eval_steps=50,
 )

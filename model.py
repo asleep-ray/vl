@@ -11,26 +11,31 @@ CLIP_VIT_BASE_PATCH16 = "openai/clip-vit-base-patch16"
 
 
 class IntegratedModel(nn.Module, GenerationMixin):
+    """Integrated model that combines CLIP and FLAN-T5 models as the encoder and decoder, respectively.
+
+    For training, the encoder CLIP model is frozen. The decoder FLAN-T5 model is trained with the LoRA module.
+    """
+
     def __init__(self):
         super(IntegratedModel, self).__init__()
 
+        # Load the CLIP model as the encoder and freeze the parameters
         self.encoder = CLIPModel.from_pretrained(CLIP_VIT_BASE_PATCH16)
-
-        flan_t5_model = T5ForConditionalGeneration.from_pretrained(FLAN_T5_BASE)
-        self.decoder = flan_t5_model.decoder
-        self.lm_head = flan_t5_model.lm_head
-
-        # Freeze the encoder parameters
         for param in self.encoder.parameters():
             param.requires_grad = False
 
+        # Load the FLAN-T5 model as the decoder and apply the LoRA module
+        flan_t5_model = T5ForConditionalGeneration.from_pretrained(FLAN_T5_BASE)
+        self.decoder = flan_t5_model.decoder
         lora_config = LoraConfig(
             r=8, lora_alpha=32, target_modules=["q", "v", "wi_0", "wi_1"], lora_dropout=0.05, bias="none"
         )
         self.decoder = get_peft_model(self.decoder, lora_config)
+        self.lm_head = flan_t5_model.lm_head
 
+        # Load the tokenizer and add a custom start token
         self.tokenizer = T5Tokenizer.from_pretrained(FLAN_T5_BASE)
-        self.tokenizer.add_special_tokens({"bos_token": "<s>"})  # Add a custom start token if not already present
+        self.tokenizer.add_special_tokens({"bos_token": "<s>"})
 
     def get_encoder_output(self, processed_image: torch.Tensor) -> torch.Tensor:
         """Get the encoded representation of the input image.
