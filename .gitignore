@@ -1,0 +1,10 @@
+exp_lecture/*
+data/*
+dataset/*
+*.ipynb
+output/*
+runs/*
+*.pth
+*.pkl
+pylintrc
+*.pyc
