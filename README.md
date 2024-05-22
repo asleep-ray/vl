@@ -18,6 +18,8 @@ Note: Downloading and processing the full dataset is time-consuming. For this pr
 - Train set: 8800 samples
 - Valid set: 2200 samples
 
+for small dataset, refer `prepare_small_dataset.py`.
+
 
 ## Step 3. Training
 
@@ -31,6 +33,14 @@ Train the model with below command.
 python train.py
 ```
 
+
+## Generation
+
+Jupyter notebook `generate.ipynb` runs model with sample images.
+
+1. Download [checkpoint](https://drive.google.com/file/d/1B5fnxsGtDCgVP1ot5CMC7kvg0FQwJXQ2/view?usp=sharing)
+2. Store it `./checkpoints`
+3. Run with `generate.ipynb`
 
 
 ## Note
