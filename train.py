@@ -1,3 +1,6 @@
+"""This script trains the integrated model on the small_split dataset. It is trained for generate captions from images.
+"""
+
 import os
 from datetime import datetime
 
@@ -26,9 +29,9 @@ print(f"Output directory: {output_dir}")
 
 training_args = TrainingArguments(
     output_dir=output_dir,
-    learning_rate=1e-2,
+    learning_rate=1e-3,
     num_train_epochs=15,
-    weight_decay=0.03,
+    weight_decay=0.01,
     logging_steps=1,
     # max_steps=500,
     logging_dir=f"./runs/{timestamp}",
